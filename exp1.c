@@ -66,21 +66,23 @@ int main(){
 
   // Matrix Initialization
   printf("Be patient! Initializing............\n\n");
-  for (j = 1; j <= nbreTests; j++){
-    for (i = ROWWISE; i <= COLUMNWISE; i++){
+  for (j = 1; j <= nbreTests; j++) {
+    for (i = ROWWISE; i <= COLUMNWISE; i++) {
       StartInitialize = Now();
-      if (i == ROWWISE)
-	InitializeMatrixRowwise();
-      else
-	InitializeMatrixColumnwise();
-      testTime = Now() - StartInitialize;
-      if (testTime > Max[i]){
-	Max[i] = testTime;
-	MaxIndex[i] = j;
+      if (i == ROWWISE) {
+	        InitializeMatrixRowwise();
       }
-      if (testTime < Min[i]){
-        Min[i] = testTime;
-	MinIndex[i] = j;
+      else {
+	        InitializeMatrixColumnwise();
+      }
+      testTime = Now() - StartInitialize;
+      if (testTime > Max[i]) {
+	        Max[i] = testTime;
+	        MaxIndex[i] = j;
+      }
+      if (testTime < Min[i]) {
+          Min[i] = testTime;
+	        MinIndex[i] = j;
       }
       Avg[i] += testTime;
     }
@@ -112,17 +114,20 @@ Timestamp Now(){
 * Output   : None                                                     *
 * Function : Initialize a matrix rowwise                              *
 \*********************************************************************/
-void      InitializeMatrixRowwise(){
+void      InitializeMatrixRowwise() {
   int i,j;
   double x;
   x = 0.0;
-  for (i = 0; i < DIMENSION; i++){
-    for (j = 0; j < DIMENSION; j++){
-      if (i >= j){
-	Matrix[i][j] = x;
-	x += 1.0;
-      } else
-	Matrix[i][j] = 1.0;
+  for (i = 0; i < DIMENSION; i++) {
+    for (j = 0; j < DIMENSION; j++) {
+      if (i >= j) {
+	       // Matrix[i][j] = x;
+         *(*Matrix + i * DIMENSION + j) = x;
+	       x += 1.0;
+      } else {
+	       // Matrix[i][j] = 1.0;
+         *(*Matrix + i * DIMENSION + j) = 1.0;
+      }
     }
   }
 }
@@ -133,18 +138,21 @@ void      InitializeMatrixRowwise(){
 * Output   : None                                                     *
 * Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
-void      InitializeMatrixColumnwise(){
+void      InitializeMatrixColumnwise() {
   int i,j;
   double x;
 
   x = 0.0;
-  for (j = 0; j < DIMENSION; j++){
-    for (i = 0; i < DIMENSION; i++){
-      if (i >= j){
-        Matrix[i][j] = x;
-	x += 1.0;
-      } else
-	Matrix[i][j] = 1.0;
+  for (j = 0; j < DIMENSION; j++) {
+    for (i = 0; i < DIMENSION; i++) {
+      if (i >= j) {
+        // Matrix[i][j] = x;
+        *(*Matrix + i * DIMENSION + j) = x;
+	      x += 1.0;
+      } else {
+	      // Matrix[i][j] = 1.0;
+        *(*Matrix + i * DIMENSION + j) = 1.0;
+      }
     }
   }
 }

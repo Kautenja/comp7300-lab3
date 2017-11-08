@@ -33,33 +33,36 @@ og: build_folder
 # MARK: Experiment 1
 #
 
+# the exp1 program
+EXP1 = ${BUILD}/exp1
 
 # compile the code for Experiment 1 (improve initialization)
 exp1: build_folder
-	${CC} exp1.c -o ${BUILD}/exp1
+	${CC} exp1.c -o ${EXP1}
 
 # run experiment 1 5 times and produce a graph of the execution
 run_exp1: exp1
-	build/exp1
-	build/exp1
-	build/exp1
-	build/exp1
-	build/exp1
-
+		${EXP1} > ${EXP1}.out
+		${EXP1} >> ${EXP1}.out
+		${EXP1} >> ${EXP1}.out
+		${EXP1} >> ${EXP1}.out
+		${EXP1} >> ${EXP1}.out
 
 #
 # MARK: Experiment 2
 #
 
+# the exo2 program
+EXP2 = ${BUILD}/exp2
 
 # compile the code for experiment 2 (improve transpose)
 exp2: build_folder
-	${CC} exp2.c -o ${BUILD}/exp2
+	${CC} exp2.c -o ${EXP2}
 
 # run experiment 2 5 times and produce a graph of the execution
-run_exp1: exp2
-	build/exp2
-	build/exp2
-	build/exp2
-	build/exp2
-	build/exp2
+run_exp2: exp2
+		${EXP2} > ${EXP2}.out
+		${EXP2} >> ${EXP2}.out
+		${EXP2} >> ${EXP2}.out
+		${EXP2} >> ${EXP2}.out
+		${EXP2} >> ${EXP2}.out
