@@ -118,18 +118,13 @@ void      InitializeMatrixRowwise() {
   int i,j;
   double x;
   x = 0.0;
-  for (i = 0; i < DIMENSION; i++) {
-    for (j = 0; j < DIMENSION; j++) {
-      if (i >= j) {
-	       // Matrix[i][j] = x;
-         *(*Matrix + i * DIMENSION + j) = x;
-	       x += 1.0;
-      } else {
-	       // Matrix[i][j] = 1.0;
+
+  for (i = 0; i < DIMENSION; i++)
+    for (j = 0; j < DIMENSION; j++)
+      if (i >= j)
+         *(*Matrix + i * DIMENSION + j) = x++;
+      else
          *(*Matrix + i * DIMENSION + j) = 1.0;
-      }
-    }
-  }
 }
 
 
@@ -141,20 +136,14 @@ void      InitializeMatrixRowwise() {
 void      InitializeMatrixColumnwise() {
   int i,j;
   double x;
-
   x = 0.0;
-  for (j = 0; j < DIMENSION; j++) {
-    for (i = 0; i < DIMENSION; i++) {
-      if (i >= j) {
-        // Matrix[i][j] = x;
-        *(*Matrix + i * DIMENSION + j) = x;
-	      x += 1.0;
-      } else {
-	      // Matrix[i][j] = 1.0;
+
+  for (j = 0; j < DIMENSION; j++)
+    for (i = 0; i < DIMENSION; i++)
+      if (i >= j)
+        *(*Matrix + i * DIMENSION + j) = x++;
+      else
         *(*Matrix + i * DIMENSION + j) = 1.0;
-      }
-    }
-  }
 }
 
 
