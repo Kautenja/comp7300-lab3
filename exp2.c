@@ -25,8 +25,8 @@ typedef double          Period;
 \**********************************************************************/
 #define DIMENSION    40000
 #define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS    12
-#define ROWWISE          0 
+#define NUMBER_TESTS     7
+#define ROWWISE          0
 #define COLUMNWISE       1
 
 /**********************************************************************\
@@ -107,10 +107,10 @@ Timestamp Now(){
 }
 
 
-/*********************************************************************\                   
-* Input    : None                                                     *                                
-* Output   : None                                                     * 
-* Function : Initialize a matrix rowwise                              *            
+/*********************************************************************\
+* Input    : None                                                     *
+* Output   : None                                                     *
+* Function : Initialize a matrix rowwise                              *
 \*********************************************************************/
 void      InitializeMatrixRowwise(){
   int i,j;
@@ -128,10 +128,10 @@ void      InitializeMatrixRowwise(){
 }
 
 
-/*********************************************************************\                        
-* Input    : None                                                     *             
-* Output   : None                                                     *         
-* Function : Initialize a matrix columnwise                           *              
+/*********************************************************************\
+* Input    : None                                                     *
+* Output   : None                                                     *
+* Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
 void      InitializeMatrixColumnwise(){
   int i,j;
@@ -150,10 +150,10 @@ void      InitializeMatrixColumnwise(){
 }
 
 
-/*********************************************************************\                
-* Input    : dimension (first n lines/columns)                        *  
-* Output   : None                                                     *   
-* Function : Initialize a matrix columnwise                           *                        
+/*********************************************************************\
+* Input    : dimension (first n lines/columns)                        *
+* Output   : None                                                     *
+* Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
 void      DisplayUpperQuandrant(unsigned dimension){
   int i,j;
@@ -163,7 +163,7 @@ void      DisplayUpperQuandrant(unsigned dimension){
     printf("[");
     for (j = 0; j < dimension; j++){
       printf("%8.1f ",Matrix[i][j]);
-    }    
+    }
     printf("]\n");
   }
   printf("***************************************************************\n\n");
