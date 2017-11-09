@@ -23,10 +23,20 @@ clean: build_folder
 # MARK: Provided Files
 #
 
+# the original program
+OG = ${BUILD}/myInitializeMatrix
 
 # compile the original file provided by Dr. Biaz
 og: build_folder
-	${CC} myInitializeMatrix.c -o ${BUILD}/myInitializeMatrix
+	${CC} myInitializeMatrix.c -o ${OG}
+
+# run the original code 5 times and collect the output
+run_og: og
+	${OG} > ${OG}.out
+	${OG} >> ${OG}.out
+	${OG} >> ${OG}.out
+	${OG} >> ${OG}.out
+	${OG} >> ${OG}.out
 
 
 #
@@ -66,3 +76,11 @@ run_exp2: exp2
 		${EXP2} >> ${EXP2}.out
 		${EXP2} >> ${EXP2}.out
 		${EXP2} >> ${EXP2}.out
+
+
+#
+# MARK: Full Stack
+#
+
+# run all the experiments sequentially
+run_all: run_og, run_exp1, run_exp2
