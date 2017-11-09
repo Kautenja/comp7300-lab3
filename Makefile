@@ -32,11 +32,11 @@ og: build_folder
 
 # run the original code 5 times and collect the output
 run_og: og
-	${OG} > ${OG}.out
-	${OG} >> ${OG}.out
-	${OG} >> ${OG}.out
-	${OG} >> ${OG}.out
-	${OG} >> ${OG}.out
+	${OG}
+	${OG}
+	${OG}
+	${OG}
+	${OG}
 
 
 #
@@ -52,11 +52,11 @@ exp1: build_folder
 
 # run experiment 1 5 times and produce a graph of the execution
 run_exp1: exp1
-		${EXP1} > ${EXP1}.out
-		${EXP1} >> ${EXP1}.out
-		${EXP1} >> ${EXP1}.out
-		${EXP1} >> ${EXP1}.out
-		${EXP1} >> ${EXP1}.out
+		${EXP1}
+		${EXP1}
+		${EXP1}
+		${EXP1}
+		${EXP1}
 
 #
 # MARK: Experiment 2
@@ -71,11 +71,11 @@ exp2: build_folder
 
 # run experiment 2 5 times and produce a graph of the execution
 run_exp2: exp2
-		${EXP2} > ${EXP2}.out
-		${EXP2} >> ${EXP2}.out
-		${EXP2} >> ${EXP2}.out
-		${EXP2} >> ${EXP2}.out
-		${EXP2} >> ${EXP2}.out
+		${EXP2}
+		${EXP2}
+		${EXP2}
+		${EXP2}
+		${EXP2}
 
 
 #
