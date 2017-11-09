@@ -1,8 +1,8 @@
 /********************************************************************\
-* Laboratory Exercise COMP 7300/06                                   *
-* Author: Saad Biaz                                                  *
-* Date  : October 25, 2017                                           *
-* File  : myInitializeMatrix.c  for Lab3                             *
+* Laboratory Exercise COMP 7300/06
+* Author: Christian Kauten
+* Date  : November 30, 2017
+* File  : exp2.c  for Lab3
 \*******************************************************************/
 
 
@@ -40,10 +40,12 @@ unsigned int MaxIndex[2],MinIndex[2];
 *                        Function prototypes                           *
 \**********************************************************************/
 Timestamp   Now();
-void        InitializeMatrixRowwise();
-void        InitializeMatrixColumnwise();
-void        DisplayUpperQuandrant(unsigned dimension);
-
+void InitializeMatrixRowwise();
+void InitializeMatrixColumnwise();
+void DisplayUpperQuandrant(unsigned dimension);
+void swap(double *a, double *b);
+void TransposeMatrix();
+void InitializeAndTranspose();
 
 int main(){
   int choice;
@@ -112,19 +114,15 @@ Timestamp Now(){
 * Output   : None                                                     *
 * Function : Initialize a matrix rowwise                              *
 \*********************************************************************/
-void      InitializeMatrixRowwise(){
-  int i,j;
-  double x;
-  x = 0.0;
-  for (i = 0; i < DIMENSION; i++){
-    for (j = 0; j < DIMENSION; j++){
-      if (i >= j){
-	Matrix[i][j] = x;
-	x += 1.0;
-      } else
-	Matrix[i][j] = 1.0;
-    }
-  }
+void InitializeMatrixRowwise() {
+  double x = 0.0;
+  #pragma omp parallel for
+  for (int i = 0; i < DIMENSION; i++)
+    for (int j = 0; j < DIMENSION; j++)
+      if (i >= j)
+         *(*Matrix + i * DIMENSION + j) = x++;
+      else
+         *(*Matrix + i * DIMENSION + j) = 1.0;
 }
 
 
@@ -133,22 +131,54 @@ void      InitializeMatrixRowwise(){
 * Output   : None                                                     *
 * Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
-void      InitializeMatrixColumnwise(){
-  int i,j;
-  double x;
-
-  x = 0.0;
-  for (j = 0; j < DIMENSION; j++){
-    for (i = 0; i < DIMENSION; i++){
-      if (i >= j){
-        Matrix[i][j] = x;
-	x += 1.0;
-      } else
-	Matrix[i][j] = 1.0;
-    }
-  }
+void InitializeMatrixColumnwise() {
+  double x = 0.0;
+  #pragma omp parallel for
+  for (int j = 0; j < DIMENSION; j++)
+    for (int i = 0; i < DIMENSION; i++)
+      if (i >= j)
+        *(*Matrix + i * DIMENSION + j) = x++;
+      else
+        *(*Matrix + i * DIMENSION + j) = 1.0;
 }
 
+
+/*!
+Swap the double values in two memory locations.
+Args:
+  a: a pointer to the first memory location
+  b: a pointer to the second memory location
+Returns:
+  void
+*/
+void swap(double *a, double *b)
+{
+ double temp = *a;
+ *a = *b;
+ *b = temp;
+}
+
+/*!
+Perform the transpose operator on Matrix.
+Args:
+  None
+Returns:
+  void
+*/
+void TransposeMatrix() {
+  #pragma omp parallel for
+  for (int i = 0; i < DIMENSION; i++)
+    for (int j = 0; j < DIMENSION; j++)
+      swap(&Matrix[i][j], &Matrix[j][i]);
+}
+
+/*!
+Initialize and transpose an array the most optimal way possible.
+*/
+void InitializeAndTranspose() {
+  InitializeMatrixRowwise();
+  TransposeMatrix();
+}
 
 /*********************************************************************\
 * Input    : dimension (first n lines/columns)                        *

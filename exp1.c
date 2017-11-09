@@ -1,8 +1,8 @@
 /********************************************************************\
-* Laboratory Exercise COMP 7300/06                                   *
-* Author: Saad Biaz                                                  *
-* Date  : October 25, 2017                                           *
-* File  : myInitializeMatrix.c  for Lab3                             *
+* Laboratory Exercise COMP 7300/06
+* Author: Christian Kauten
+* Date  : November 30, 2017
+* File  : exp1.c  for Lab3
 \*******************************************************************/
 
 
@@ -134,12 +134,12 @@ void      InitializeMatrixRowwise() {
 * Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
 void      InitializeMatrixColumnwise() {
-  int i,j;
+  // int i,j;
   double x;
   x = 0.0;
-
-  for (j = 0; j < DIMENSION; j++)
-    for (i = 0; i < DIMENSION; i++)
+  #pragma omp parallel for
+  for (int j = 0; j < DIMENSION; j++)
+    for (int i = 0; i < DIMENSION; i++)
       if (i >= j)
         *(*Matrix + i * DIMENSION + j) = x++;
       else
