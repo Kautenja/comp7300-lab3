@@ -116,10 +116,11 @@ Timestamp Now(){
 * Function : Initialize a matrix rowwise                              *
 \*********************************************************************/
 void InitializeMatrixRowwise() {
+  int i,j;
   double x = 0.0;
   #pragma omp parallel for
-  for (int i = 0; i < DIMENSION; i++)
-    for (int j = 0; j < DIMENSION; j++)
+  for (i = 0; i < DIMENSION; i++)
+    for (j = 0; j < DIMENSION; j++)
       if (i >= j)
          *(*Matrix + i * DIMENSION + j) = x++;
       else
@@ -133,10 +134,11 @@ void InitializeMatrixRowwise() {
 * Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
 void InitializeMatrixColumnwise() {
+  int i,j;
   double x = 0.0;
   #pragma omp parallel for
-  for (int j = 0; j < DIMENSION; j++)
-    for (int i = 0; i < DIMENSION; i++)
+  for (j = 0; j < DIMENSION; j++)
+    for (i = 0; i < DIMENSION; i++)
       if (i >= j)
         *(*Matrix + i * DIMENSION + j) = x++;
       else
@@ -166,11 +168,12 @@ Returns:
   void
 */
 void TransposeMatrix() {
+  int i,j;
   // the naive baseline solution that performs poorly because it is oblivious
   // of the cache and therefore generates many cache misses
   #pragma omp parallel for
-  for (int i = 0; i < DIMENSION - 2; i++)
-    for (int j = i + 1; j < DIMENSION - 1; j++)
+  for (i = 0; i < DIMENSION - 2; i++)
+    for (j = i + 1; j < DIMENSION - 1; j++)
       swap(&Matrix[i][j], &Matrix[j][i]);
 }
 
@@ -185,13 +188,14 @@ Returns:
   void
 */
 void CacheObliviousTranspose(int i, int j, int dimension) {
+  int x,y;
   // if the dimension is lower than the threshhold (arbitrary within in the
   // cache range) perform the actual transpose on the submatrix.
   if (dimension <= 256) {
     // the naive iterative transpose operator (less bad on small matrices)
     #pragma omp parallel for
-    for (int x = i; x < i + dimension - 2; x++)
-      for (int y = x + 1 + j; y < j + dimension - 1; y++)
+    for (x = i; x < i + dimension - 2; x++)
+      for (y = x + 1 + j; y < j + dimension - 1; y++)
         swap(&Matrix[x][y], &Matrix[y][x]);
   } else {
     // cut the matrix into four quadrants and recursively transpose them
@@ -214,7 +218,6 @@ Initialize and transpose an array the most optimal way possible.
 */
 void InitializeAndTranspose() {
   InitializeMatrixRowwise();
-  // TransposeMatrix();
   CacheObliviousTranspose(0, 0, DIMENSION);
 }
 
