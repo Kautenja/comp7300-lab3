@@ -83,4 +83,4 @@ run_exp2: exp2
 #
 
 # run all the experiments sequentially
-run_all: run_og, run_exp1, run_exp2
+run_all: run_og run_exp1 run_exp2
