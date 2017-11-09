@@ -26,16 +26,14 @@ typedef double          Period;
 #define DIMENSION    40000
 #define PRINTDIM         7 // Dimension of matrix to display
 #define NUMBER_TESTS     7
-#define ROWWISE          0
-#define COLUMNWISE       1
 
 /**********************************************************************\
 *                      Global data                              *
 \**********************************************************************/
 Timestamp StartTime;
 double    Matrix[DIMENSION][DIMENSION];
-Period    Max[2],Min[2],Avg[2];
-unsigned int MaxIndex[2],MinIndex[2];
+Period    Max, Min, Avg;
+unsigned int MaxIndex, MinIndex;
 /**********************************************************************\
 *                        Function prototypes                           *
 \**********************************************************************/
@@ -49,49 +47,51 @@ void InitializeAndTranspose();
 
 int main(){
   int choice;
-  Timestamp StartInitialize;
-  Period    testTime;
-  unsigned int i,j,nbreTests;
+  Timestamp tStart;
+  Period testTime;
+  unsigned int i, j, nbreTests;
 
-  // Global Initialization
-  StartTime       = Now();
+  //
+  // MARK: Global Initialization
+  //
 
-  nbreTests       = NUMBER_TESTS;
-  Max[ROWWISE]    = 0.00;
-  Max[COLUMNWISE] = 0.00;
+  tStart = Now();
 
-  Min[ROWWISE]    = 10000.00;
-  Min[COLUMNWISE] = 10000.00;
+  nbreTests = NUMBER_TESTS;
 
-  Avg[ROWWISE]    = 0.00;
-  Avg[COLUMNWISE] = 0.00;
+  Min    = 10000.00;
+  Max    = 0.00;
+  Avg    = 0.00;
 
-  // Matrix Initialization
-  printf("Be patient! Initializing............\n\n");
-  for (j = 1; j <= nbreTests; j++){
-    for (i = ROWWISE; i <= COLUMNWISE; i++){
-      StartInitialize = Now();
-      if (i == ROWWISE)
-	InitializeMatrixRowwise();
-      else
-	InitializeMatrixColumnwise();
-      testTime = Now() - StartInitialize;
-      if (testTime > Max[i]){
-	Max[i] = testTime;
-	MaxIndex[i] = j;
-      }
-      if (testTime < Min[i]){
-        Min[i] = testTime;
-	MinIndex[i] = j;
-      }
-      Avg[i] += testTime;
+  //
+  // MARK: Test Suite
+  //
+
+  // display a message and run the test
+  printf("Be patient! Initializing and Transposing............\n\n");
+  for (j = 1; j <= nbreTests; j++) {
+    // Record the starting time before the test begins
+    tStart = Now();
+    // Initialize a matrix and perform the transpose
+    InitializeAndTranspose();
+    // Calculate the total time as the difference of now and the start time
+    testTime = Now() - tStart;
+    // if the time is greater than the max time, record it
+    if (testTime > Max) {
+      Max = testTime;
+      MaxIndex = j;
     }
-    printf("%3d: Rowwise    Max[%2d]=%7.3f Min[%2d]=%7.3f Avg=%7.3f\n",
-	   j,MaxIndex[ROWWISE],Max[ROWWISE],MinIndex[ROWWISE],
-	   Min[ROWWISE],Avg[ROWWISE]/j);
-    printf("     Columnwise Max[%2d]=%7.3f Min[%2d]=%7.3f Avg=%7.3f\n\n",
-           MaxIndex[COLUMNWISE],Max[COLUMNWISE],MinIndex[COLUMNWISE],
-	   Min[COLUMNWISE],Avg[COLUMNWISE]/j);
+    // if the time is less than the min time, record it
+    if (testTime < Min) {
+      Min = testTime;
+      MinIndex = j;
+    }
+    // increment the sum of times for the avg
+    Avg += testTime;
+    // print a status update to the console about the test
+    printf("%3d: Init and Transpose Max[%2d]=%7.3f Min[%2d]=%7.3f Avg=%7.3f\n", j, MaxIndex, Max, MinIndex, Min, Avg / j);
+    // display the upper portion of the matrix to ensure correctness of the
+    // algorithms
     DisplayUpperQuandrant(PRINTDIM);
   }
 }
@@ -151,8 +151,7 @@ Args:
 Returns:
   void
 */
-void swap(double *a, double *b)
-{
+void swap(double *a, double *b) {
  double temp = *a;
  *a = *b;
  *b = temp;
@@ -166,9 +165,10 @@ Returns:
   void
 */
 void TransposeMatrix() {
+  // the naive baseline solution that performs poorly due to cache oblivious
   #pragma omp parallel for
-  for (int i = 0; i < DIMENSION; i++)
-    for (int j = 0; j < DIMENSION; j++)
+  for (int i = 0; i < DIMENSION - 2; i++)
+    for (int j = i + 1; j < DIMENSION - 1; j++)
       swap(&Matrix[i][j], &Matrix[j][i]);
 }
 
