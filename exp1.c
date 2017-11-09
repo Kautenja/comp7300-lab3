@@ -134,12 +134,12 @@ void      InitializeMatrixRowwise() {
 * Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
 void      InitializeMatrixColumnwise() {
-  // int i,j;
+  int i,j;
   double x;
   x = 0.0;
   #pragma omp parallel for
-  for (int j = 0; j < DIMENSION; j++)
-    for (int i = 0; i < DIMENSION; i++)
+  for (j = 0; j < DIMENSION; j++)
+    for (i = 0; i < DIMENSION; i++)
       if (i >= j)
         *(*Matrix + i * DIMENSION + j) = x++;
       else
