@@ -44,6 +44,7 @@ void DisplayUpperQuandrant(unsigned dimension);
 void swap(double *a, double *b);
 void TransposeMatrix();
 void InitializeAndTranspose();
+void RecursiveObliviousTranpose(double matrix[][DIMENSION], int i, int j, int dimension);
 
 int main(){
   int choice;
@@ -172,12 +173,27 @@ void TransposeMatrix() {
       swap(&Matrix[i][j], &Matrix[j][i]);
 }
 
+void RecursiveObliviousTranpose(double matrix[][DIMENSION], int i, int j, int dimension) {
+  if (dimension <= 32) {
+    for (int x = i; x < dimension - 2; x++)
+      for (int y = x + 1 + j; y < dimension - 1; y++)
+        swap(&matrix[x][y], &matrix[x][y]);
+  } else {
+    int midpoint = dimension / 2;
+    RecursiveObliviousTranpose(matrix, i, j, midpoint);
+    RecursiveObliviousTranpose(matrix, i + midpoint, j, midpoint);
+    RecursiveObliviousTranpose(matrix, i, j + midpoint, midpoint);
+    RecursiveObliviousTranpose(matrix, i + midpoint, j + midpoint, midpoint);
+  }
+}
+
 /*!
 Initialize and transpose an array the most optimal way possible.
 */
 void InitializeAndTranspose() {
   InitializeMatrixRowwise();
-  TransposeMatrix();
+  // TransposeMatrix();
+  RecursiveObliviousTranpose(Matrix, 0, 0, DIMENSION);
 }
 
 /*********************************************************************\
