@@ -26,7 +26,7 @@ typedef double          Period;
 \**********************************************************************/
 #define DIMENSION    40000
 #define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS     1//7
+#define NUMBER_TESTS     7
 #define ROWWISE          0
 #define COLUMNWISE       1
 
