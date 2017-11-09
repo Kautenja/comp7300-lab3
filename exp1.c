@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <sys/select.h>
 #include <sys/time.h>
+#include <string.h>
 
 /******************************************************************\
 *                  Global data types                               *
@@ -25,7 +26,7 @@ typedef double          Period;
 \**********************************************************************/
 #define DIMENSION    40000
 #define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS     7
+#define NUMBER_TESTS     1//7
 #define ROWWISE          0
 #define COLUMNWISE       1
 
@@ -114,11 +115,10 @@ Timestamp Now(){
 * Output   : None                                                     *
 * Function : Initialize a matrix rowwise                              *
 \*********************************************************************/
-void      InitializeMatrixRowwise() {
+void InitializeMatrixRowwise() {
   int i,j;
-  double x;
-  x = 0.0;
-
+  double x = 0.0;
+  #pragma omp parallel for
   for (i = 0; i < DIMENSION; i++)
     for (j = 0; j < DIMENSION; j++)
       if (i >= j)
@@ -133,10 +133,9 @@ void      InitializeMatrixRowwise() {
 * Output   : None                                                     *
 * Function : Initialize a matrix columnwise                           *
 \*********************************************************************/
-void      InitializeMatrixColumnwise() {
+void InitializeMatrixColumnwise() {
   int i,j;
-  double x;
-  x = 0.0;
+  double x = 0.0;
   #pragma omp parallel for
   for (j = 0; j < DIMENSION; j++)
     for (i = 0; i < DIMENSION; i++)
