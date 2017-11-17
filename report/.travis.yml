@@ -1,0 +1,10 @@
+sudo: required
+language: python
+python:
+- 3.6
+notifications:
+  email: false
+before_install:
+- make linux_install
+script:
+- make pdf

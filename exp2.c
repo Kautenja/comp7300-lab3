@@ -24,8 +24,8 @@ typedef double          Period;
 *                      Global definitions                              *
 \**********************************************************************/
 #define DIMENSION    40000
-#define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS     7
+#define PRINTDIM         52//7 // Dimension of matrix to display
+#define NUMBER_TESTS     1//7
 
 /**********************************************************************\
 *                      Global data                              *
@@ -191,7 +191,7 @@ void CacheObliviousTranspose(int i, int j, int dimension) {
   int x,y;
   // if the dimension is lower than the threshhold (arbitrary within in the
   // cache range) perform the actual transpose on the submatrix.
-  if (dimension <= 256) {
+  if (dimension <= 64) {
     // the naive iterative transpose operator (less bad on small matrices)
     #pragma omp parallel for
     for (x = i; x < i + dimension - 2; x++)

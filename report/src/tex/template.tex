@@ -1,0 +1,27 @@
+% This is a template following IEEE style
+\documentclass[conference]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+% code listings package
+\usepackage{listings}
+% these packages render tables
+\usepackage{booktabs}
+% the package for references
+% \usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+
+% force columns to be level on last page (for easier printing in journals)
+\usepackage{flushend}
+% code highlighting. found in the pandoc default
+$highlighting-macros$
+% override tightlist. error with pandoc?
+\def\tightlist{}
+
+% start the document, the markdown code takes over from this point
+\begin{document}
+$body$
+\end{document}

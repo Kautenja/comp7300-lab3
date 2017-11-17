@@ -1,3 +1,4 @@
+#!/bin/sh
 mkdir -p build
 echo 'compiling'
 cc $1.c -o ./build/$1

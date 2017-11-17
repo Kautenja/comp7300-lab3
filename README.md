@@ -26,7 +26,7 @@ the automated sequential execution of experiments for averaged results.
 Biaz. to compile and execute it run:
 
 ```shell
-make run_og
+./run.sh myInitializeMatrix
 ```
 
 ### Optimized Initialization
@@ -35,7 +35,7 @@ make run_og
 compile and execute it run:
 
 ```shell
-make run_exp1
+./run.sh exp1
 ```
 
 ### Optimized Transpose
@@ -44,5 +44,5 @@ make run_exp1
 and execute it run:
 
 ```shell
-make run_exp2
+./run.sh exp2
 ```
