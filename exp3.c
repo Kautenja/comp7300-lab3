@@ -41,6 +41,8 @@ unsigned int MaxIndex, MinIndex;
 Timestamp Now();
 int rowwise_nodes(int i);
 double rowwise_entry(int i, int j);
+int columnwise_tn(int n);
+int columnwise_nodes(int j, int n);
 double columnwise_entry(int i, int j);
 void initialize_rowwise();
 void initialize_columnwise();
@@ -133,50 +135,60 @@ double rowwise_entry(int i, int j) {
   return rowwise_nodes(i) + j;
 }
 
+/*!
+ * Return the tn for a column based on the dimension
+ * @param  n the dimension of the matrix
+ */
+int columnwise_tn(int n) {
+  return 2 * (n - 4) + 9;
+}
+
+/*!
+ * Return the number of nodes in a columnwise matrix
+ * @param  j the column index
+ * @param  n the dimension of the matrix
+ */
+int columnwise_nodes(int j, int n) {
+  return (1.0 / 2.0) * (-(j*j) + columnwise_tn(n)*j - 2.0);
+}
+
+/*!
+ * Return the columnwise entry for an i,j pairing.
+ * mathed out using the series of smaller matrices and WolframAlpha
+ * @param  i the row index
+ * @param  j the column index
+ */
 double columnwise_entry(int i, int j) {
   if (i < j) {
     return 1;
   }
-
-
-  return 0;
+  return columnwise_nodes(j + 1, DIMENSION) - (DIMENSION - i - 1);
 }
 
-/*********************************************************************\
-* Input    : None                                                     *
-* Output   : None                                                     *
-* Function : Initialize a matrix rowwise                              *
-\*********************************************************************/
+/*!
+ * Initialize the matrix rowwise
+ */
 void initialize_rowwise() {
   int i,j;
   double x = 0.0;
   #pragma omp parallel for
   for (i = 0; i < DIMENSION; i++)
     for (j = 0; j < DIMENSION; j++)
-      if (i >= j)
-         *(*Matrix + i * DIMENSION + j) = x++;
-      else
-         *(*Matrix + i * DIMENSION + j) = 1.0;
+      *(*Matrix + i * DIMENSION + j) = rowwise_entry(i, j);
 }
 
 
-/*********************************************************************\
-* Input    : None                                                     *
-* Output   : None                                                     *
-* Function : Initialize a matrix columnwise                           *
-\*********************************************************************/
+/*!
+ * Initialize the matrix columnwise
+ */
 void initialize_columnwise() {
   int i,j;
   double x = 0.0;
   #pragma omp parallel for
   for (j = 0; j < DIMENSION; j++)
     for (i = 0; i < DIMENSION; i++)
-      if (i >= j)
-        *(*Matrix + i * DIMENSION + j) = x++;
-      else
-        *(*Matrix + i * DIMENSION + j) = 1.0;
+      *(*Matrix + i * DIMENSION + j) = columnwise_entry(i, j);
 }
-
 
 /*!
 Swap the double values in two memory locations.
