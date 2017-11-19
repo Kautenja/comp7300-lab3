@@ -21,6 +21,13 @@
 typedef double          Timestamp;
 typedef double          Period;
 
+// parameters for multithreading applications
+struct threadParams {
+    int i;
+    int j;
+    int dimension;
+};
+
 /**********************************************************************\
 *                      Global definitions                              *
 \**********************************************************************/
@@ -28,7 +35,16 @@ typedef double          Period;
 #define PRINTDIM         22 // Dimension of matrix to display
 #define NUMBER_TESTS     7
 #define BLOCK_SIZE       1024
-#define NTHREADS         16
+/*!
+The threading exponent. 2^THREAD_EXP threads are used.
+For tux machines THREAD_EXP = 4
+For laptops THREAD_EXP = 2
+*/
+#define THREAD_EXP       4 // 2^THREAD_EXP threads are used
+/*!
+The number of threads determined by the threading exponent
+*/
+#define NTHREADS         2 << THREAD_EXP - 1
 /**********************************************************************\
 *                      Global data                                     *
 \**********************************************************************/
@@ -64,10 +80,6 @@ int main(){
   Period testTime;
   unsigned int i, j, nbreTests;
 
-  //
-  // MARK: Global Initialization
-  //
-
   tStart = Now();
 
   nbreTests = NUMBER_TESTS;
@@ -75,10 +87,6 @@ int main(){
   Min    = 10000.00;
   Max    = 0.00;
   Avg    = 0.00;
-
-  //
-  // MARK: Test Suite
-  //
 
   // display a message and run the test
   printf("Be patient! Initializing and Transposing............\n\n");
@@ -178,96 +186,34 @@ void initialize_rowwise_recursive(int i, int j, int dimension, int blocksize) {
   }
 }
 
-// // Helpers for multithreading
-// void *thread_initialize_rowwise_tl(void *voidData) {
-//   initialize_rowwise_recursive(0, 0, DIMENSION / 2, BLOCK_SIZE);
-//   return 0;
-// }
-//
-// void *thread_initialize_rowwise_tr(void *voidData) {
-//   initialize_rowwise_recursive(DIMENSION / 2, 0, DIMENSION / 2, BLOCK_SIZE);
-//   return 0;
-// }
-//
-// void *thread_initialize_rowwise_bl(void *voidData) {
-//   initialize_rowwise_recursive(0, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
-//   return 0;
-// }
-//
-// void *thread_initialize_rowwise_br(void *voidData) {
-//   initialize_rowwise_recursive(DIMENSION / 2, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
-//   return 0;
-// }
-
-struct rowwiseThreadParams {
-    int i;
-    int j;
-    int dimension;
-};
-
+/*!
+A launcher for starting background threads to initialize rowwise.
+*/
 void *thread_initialize_rowwise_helper(void *data) {
-  struct rowwiseThreadParams *params = data;
+  struct threadParams *params = data;
   initialize_rowwise_recursive(params->i, params->j, params->dimension, BLOCK_SIZE);
   return 0;
 }
 
+/*!
+Initialize the matrix rowwise using threads.
+*/
 void thread_initialize_rowwise() {
   pthread_t threads[NTHREADS];
   int thread_args[NTHREADS];
   int rc, i, j, dimension;
 
-  if (NTHREADS == 4) {
-    dimension = DIMENSION / 2;
-    struct rowwiseThreadParams params[2][2];
-    for (i = 0; i < 2; i++) {
-      for (j = 0; j < 2; j++) {
-        params[i][j].i = i * dimension;
-        params[i][j].j = j * dimension;
-        params[i][j].dimension = dimension;
-        rc = pthread_create(&threads[i + 2 * j], NULL, *thread_initialize_rowwise_helper, &params[i][j]);
-      }
-    }
-
-
-    // struct rowwiseThreadParams params_tl;
-    // params_tl.i = 0;
-    // params_tl.j = 0;
-    // params_tl.dimension = dimension;
-    // rc = pthread_create(&threads[0], NULL, *thread_initialize_rowwise_helper, &params_tl);
-    //
-    // struct rowwiseThreadParams params_tr;
-    // params_tr.i = dimension;
-    // params_tr.j = 0;
-    // params_tr.dimension = dimension;
-    // rc = pthread_create(&threads[1], NULL, *thread_initialize_rowwise_helper, &params_tr);
-    //
-    // struct rowwiseThreadParams params_bl;
-    // params_bl.i = 0;
-    // params_bl.j = dimension;
-    // params_bl.dimension = dimension;
-    // rc = pthread_create(&threads[2], NULL, *thread_initialize_rowwise_helper, &params_bl);
-    //
-    // struct rowwiseThreadParams params_br;
-    // params_br.i = dimension;
-    // params_br.j = dimension;
-    // params_br.dimension = dimension;
-    // rc = pthread_create(&threads[3], NULL, *thread_initialize_rowwise_helper, &params_br);
-  }
-  else if (NTHREADS == 16) {
-
-    dimension = DIMENSION / 4;
-    struct rowwiseThreadParams params[4][4];
-    for (i = 0; i < 4; i++) {
-      for (j = 0; j < 4; j++) {
-        params[i][j].i = i * dimension;
-        params[i][j].j = j * dimension;
-        params[i][j].dimension = dimension;
-        rc = pthread_create(&threads[i + 4 * j], NULL, *thread_initialize_rowwise_helper, &params[i][j]);
-      }
+  dimension = DIMENSION / THREAD_EXP;
+  struct threadParams params[THREAD_EXP][THREAD_EXP];
+  for (i = 0; i < THREAD_EXP; i++) {
+    for (j = 0; j < THREAD_EXP; j++) {
+      params[i][j].i = i * dimension;
+      params[i][j].j = j * dimension;
+      params[i][j].dimension = dimension;
+      rc = pthread_create(&threads[i + THREAD_EXP * j], NULL, *thread_initialize_rowwise_helper, &params[i][j]);
     }
   }
 
-  printf("joining");
   // wait for threads to finish
   for (i = 0; i < NTHREADS; i++) {
     rc = pthread_join(threads[i], NULL);
@@ -302,16 +248,17 @@ double columnwise_entry(int i, int j) {
 void initialize_columnwise() {
   int i,j;
   double x = 0.0;
-  #pragma omp parallel for
   for (j = 0; j < DIMENSION; j++)
     for (i = 0; i < DIMENSION; i++)
       *(*Matrix + i * DIMENSION + j) = columnwise_entry(i, j);
 }
 
+/*!
+Initialize the matrix columnwise using a recursive solution.
+*/
 void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize) {
   int dx,dy;
   if (dimension <= blocksize) {
-    #pragma omp parallel for
     for (dx = 0; dx < dimension; dx++)
       for (dy = 0; dy < dimension; dy++)
         *(*Matrix + (i + dx) * DIMENSION + j + dy) = columnwise_entry(i + dx, j + dy);
@@ -330,38 +277,36 @@ void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize)
   }
 }
 
-void *thread_initialize_columnwise_tl(void *voidData) {
-  initialize_columnwise_recursive(0, 0, DIMENSION / 2, BLOCK_SIZE);
+/*!
+A launcher for starting background threads to initialize columnwise.
+*/
+void *thread_initialize_columnwise_helper(void *data) {
+  struct threadParams *params = data;
+  initialize_columnwise_recursive(params->i, params->j, params->dimension, BLOCK_SIZE);
   return 0;
 }
 
-void *thread_initialize_columnwise_tr(void *voidData) {
-  initialize_columnwise_recursive(DIMENSION / 2, 0, DIMENSION / 2, BLOCK_SIZE);
-  return 0;
-}
-
-void *thread_initialize_columnwise_bl(void *voidData) {
-  initialize_columnwise_recursive(0, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
-  return 0;
-}
-
-void *thread_initialize_columnwise_br(void *voidData) {
-  initialize_columnwise_recursive(DIMENSION / 2, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
-  return 0;
-}
-
+/*!
+Initialize the matrix columnwise using threads.
+*/
 void thread_initialize_columnwise() {
   pthread_t threads[NTHREADS];
   int thread_args[NTHREADS];
-  int rc, i;
+  int rc, i, j, dimension;
 
-  pthread_create(&threads[0], NULL, *thread_initialize_columnwise_tl, NULL);
-  pthread_create(&threads[1], NULL, *thread_initialize_columnwise_tr, NULL);
-  pthread_create(&threads[2], NULL, *thread_initialize_columnwise_bl, NULL);
-  pthread_create(&threads[3], NULL, *thread_initialize_columnwise_br, NULL);
+  dimension = DIMENSION / THREAD_EXP;
+  struct threadParams params[THREAD_EXP][THREAD_EXP];
+  for (j = 0; j < THREAD_EXP; j++) {
+    for (i = 0; i < THREAD_EXP; i++) {
+      params[i][j].i = i * dimension;
+      params[i][j].j = j * dimension;
+      params[i][j].dimension = dimension;
+      rc = pthread_create(&threads[i + THREAD_EXP * j], NULL, *thread_initialize_columnwise_helper, &params[i][j]);
+    }
+  }
 
   // wait for threads to finish
-  for (i=0; i<NTHREADS; ++i) {
+  for (i = 0; i < NTHREADS; i++) {
     rc = pthread_join(threads[i], NULL);
   }
 }
@@ -391,12 +336,15 @@ void transpose() {
   int i,j;
   // the naive baseline solution that performs poorly because it is oblivious
   // of the cache and therefore generates many cache misses
-  #pragma omp parallel for
   for (i = 0; i < DIMENSION; i++)
     for (j = i; j < DIMENSION; j++)
       swap(&Matrix[i][j], &Matrix[j][i]);
 }
 
+/*!
+Transpose the matrix recursively. i.e. cut into squares for better locality
+without losing generality by cache blocking directly.
+*/
 void recursive_transpose(int i, int j, int dimension, int blocksize) {
   int dx,dy;
   if (dimension <= blocksize) {
@@ -424,38 +372,36 @@ void recursive_transpose(int i, int j, int dimension, int blocksize) {
   }
 }
 
-void *thread_transpose_helper_tl(void *voidData) {
-  recursive_transpose(0, 0, DIMENSION / 2, BLOCK_SIZE);
+/*!
+A launcher for starting background threads to tranpose the matrix.
+*/
+void *thread_transpose_helper(void *data) {
+  struct threadParams *params = data;
+  recursive_transpose(params->i, params->j, params->dimension, 512);
   return 0;
 }
 
-void *thread_transpose_helper_tr(void *voidData) {
-  recursive_transpose(DIMENSION / 2, 0, DIMENSION / 2, BLOCK_SIZE);
-  return 0;
-}
-
-void *thread_transpose_helper_bl(void *voidData) {
-  recursive_transpose(0, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
-  return 0;
-}
-
-void *thread_transpose_helper_br(void *voidData) {
-  recursive_transpose(DIMENSION / 2, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
-  return 0;
-}
-
+/*!
+Transpose the matrix using threads.
+*/
 void thread_transpose() {
   pthread_t threads[NTHREADS];
   int thread_args[NTHREADS];
-  int rc, i;
+  int rc, i, j, dimension;
 
-  pthread_create(&threads[0], NULL, *thread_transpose_helper_tl, NULL);
-  pthread_create(&threads[1], NULL, *thread_transpose_helper_tr, NULL);
-  pthread_create(&threads[2], NULL, *thread_transpose_helper_bl, NULL);
-  pthread_create(&threads[3], NULL, *thread_transpose_helper_br, NULL);
+  dimension = DIMENSION / THREAD_EXP;
+  struct threadParams params[THREAD_EXP][THREAD_EXP];
+  for (i = 0; i < THREAD_EXP; i++) {
+    for (j = 0; j < THREAD_EXP; j++) {
+      params[i][j].i = i * dimension;
+      params[i][j].j = j * dimension;
+      params[i][j].dimension = dimension;
+      rc = pthread_create(&threads[i + THREAD_EXP * j], NULL, *thread_transpose_helper, &params[i][j]);
+    }
+  }
 
   // wait for threads to finish
-  for (i=0; i<NTHREADS; ++i) {
+  for (i = 0; i < NTHREADS; i++) {
     rc = pthread_join(threads[i], NULL);
   }
 }
@@ -466,15 +412,15 @@ Initialize and transpose an array the most optimal way possible.
 void initializeAndTranspose() {
   // initialize_rowwise();
   // initialize_rowwise_recursive(0, 0, DIMENSION, 512);
-  thread_initialize_rowwise();
+  // thread_initialize_rowwise();
 
   // initialize_columnwise();
   // initialize_columnwise_recursive(0, 0, DIMENSION, 512);
-  // thread_initialize_columnwise();
+  thread_initialize_columnwise();
 
   // transpose();
   // recursive_transpose(0, 0, DIMENSION, 512);
-  // thread_transpose();
+  thread_transpose();
 }
 
 /*********************************************************************\
