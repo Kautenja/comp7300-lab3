@@ -27,25 +27,26 @@ typedef double          Period;
 #define PRINTDIM         16 // Dimension of matrix to display
 #define NUMBER_TESTS     1//7
 #define BLOCK_SIZE       1024
-
 /**********************************************************************\
-*                      Global data                              *
+*                      Global data                                     *
 \**********************************************************************/
 Timestamp StartTime;
 double    Matrix[DIMENSION][DIMENSION];
 Period    Max, Min, Avg;
 unsigned int MaxIndex, MinIndex;
+int COLUMNWISE_TN = 2 * (DIMENSION - 4) + 9;
 /**********************************************************************\
 *                        Function prototypes                           *
 \**********************************************************************/
 Timestamp Now();
 int rowwise_nodes(int i);
 double rowwise_entry(int i, int j);
-int columnwise_tn(int n);
-int columnwise_nodes(int j, int n);
+int columnwise_nodes(int j);
 double columnwise_entry(int i, int j);
 void initialize_rowwise();
+void initialize_rowwise_recursive(int i, int j, int dimension, int blocksize);
 void initialize_columnwise();
+void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize);
 void displayUpperQuadrant(unsigned dimension);
 void swap(double *a, double *b);
 void transpose();
@@ -124,7 +125,7 @@ int rowwise_nodes(int i) {
 }
 
 /*!
- * Return the entry for a rowwise array
+ * Return the entry for a rowwise array.
  * @param i the row to fetch the value of
  * @param j the column to fetch the value of
  */
@@ -136,20 +137,46 @@ double rowwise_entry(int i, int j) {
 }
 
 /*!
- * Return the tn for a column based on the dimension
- * @param  n the dimension of the matrix
+ * Initialize the matrix rowwise.
  */
-int columnwise_tn(int n) {
-  return 2 * (n - 4) + 9;
+void initialize_rowwise() {
+  int i,j;
+  double x = 0.0;
+  #pragma omp parallel for
+  for (i = 0; i < DIMENSION; i++)
+    for (j = 0; j < DIMENSION; j++)
+      *(*Matrix + i * DIMENSION + j) = rowwise_entry(i, j);
+}
+
+void initialize_rowwise_recursive(int i, int j, int dimension, int blocksize) {
+  int dx,dy;
+  if (dimension <= blocksize) {
+    #pragma omp parallel for
+    for (dx = 0; dx < dimension; dx++)
+      for (dy = 0; dy < dimension; dy++)
+        *(*Matrix + (i + dx) * DIMENSION + j + dy) = rowwise_entry(i + dx, j + dy);
+  } else {
+    // cut the matrix into four quadrants and recursively initialize
+    int midpoint = dimension / 2;
+    // recursively call this function with the 4 smaller quadrants
+    // the upper left quadrant
+    initialize_rowwise_recursive(i, j, midpoint, blocksize);
+    // the upper right quadrant
+    initialize_rowwise_recursive(i + midpoint, j, midpoint, blocksize);
+    // the lower left quadrant
+    initialize_rowwise_recursive(i, j + midpoint, midpoint, blocksize);
+    // the lower right quadrant
+    initialize_rowwise_recursive(i + midpoint, j + midpoint, midpoint, blocksize);
+  }
 }
 
 /*!
- * Return the number of nodes in a columnwise matrix
+ * Return the number of nodes in a columnwise matrix.
  * @param  j the column index
  * @param  n the dimension of the matrix
  */
-int columnwise_nodes(int j, int n) {
-  return (1.0 / 2.0) * (-(j*j) + columnwise_tn(n)*j - 2.0);
+int columnwise_nodes(int j) {
+  return (1.0 / 2.0) * (-(j*j) + COLUMNWISE_TN*j - 2.0);
 }
 
 /*!
@@ -162,24 +189,11 @@ double columnwise_entry(int i, int j) {
   if (i < j) {
     return 1;
   }
-  return columnwise_nodes(j + 1, DIMENSION) - (DIMENSION - i - 1);
+  return columnwise_nodes(j + 1) - (DIMENSION - i - 1);
 }
 
 /*!
- * Initialize the matrix rowwise
- */
-void initialize_rowwise() {
-  int i,j;
-  double x = 0.0;
-  #pragma omp parallel for
-  for (i = 0; i < DIMENSION; i++)
-    for (j = 0; j < DIMENSION; j++)
-      *(*Matrix + i * DIMENSION + j) = rowwise_entry(i, j);
-}
-
-
-/*!
- * Initialize the matrix columnwise
+ * Initialize the matrix columnwise.
  */
 void initialize_columnwise() {
   int i,j;
@@ -188,6 +202,28 @@ void initialize_columnwise() {
   for (j = 0; j < DIMENSION; j++)
     for (i = 0; i < DIMENSION; i++)
       *(*Matrix + i * DIMENSION + j) = columnwise_entry(i, j);
+}
+
+void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize) {
+  int dx,dy;
+  if (dimension <= blocksize) {
+    #pragma omp parallel for
+    for (dx = 0; dx < dimension; dx++)
+      for (dy = 0; dy < dimension; dy++)
+        *(*Matrix + (i + dx) * DIMENSION + j + dy) = columnwise_entry(i + dx, j + dy);
+  } else {
+    // cut the matrix into four quadrants and recursively initialize
+    int midpoint = dimension / 2;
+    // recursively call this function with the 4 smaller quadrants
+    // the upper left quadrant
+    initialize_columnwise_recursive(i, j, midpoint, blocksize);
+    // the upper right quadrant
+    initialize_columnwise_recursive(i + midpoint, j, midpoint, blocksize);
+    // the lower left quadrant
+    initialize_columnwise_recursive(i, j + midpoint, midpoint, blocksize);
+    // the lower right quadrant
+    initialize_columnwise_recursive(i + midpoint, j + midpoint, midpoint, blocksize);
+  }
 }
 
 /*!
@@ -252,9 +288,11 @@ void recursive_transpose(int i, int j, int dimension, int blocksize) {
 Initialize and transpose an array the most optimal way possible.
 */
 void initializeAndTranspose() {
-  // initialize_rowwise();
-  initialize_columnwise();
-  // recursive_transpose(0, 0, DIMENSION, BLOCK_SIZE);
+  initialize_rowwise();
+  // initialize_rowwise_recursive(0, 0, DIMENSION, 512);
+  // initialize_columnwise();
+  // initialize_columnwise_recursive(0, 0, DIMENSION, 512);
+  recursive_transpose(0, 0, DIMENSION, 512);
 }
 
 /*********************************************************************\
