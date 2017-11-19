@@ -111,7 +111,7 @@ int main(){
     // increment the sum of times for the avg
     Avg += testTime;
     // print a status update to the console about the test
-    printf("%3d: Init and Transpose Max[%2d]=%7.3f Min[%2d]=%7.3f Avg=%7.3f\n", j, MaxIndex, Max, MinIndex, Min, Avg / j);
+    printf("%3d: Init and Transpose Max[%2d]=%7.9f Min[%2d]=%7.9f Avg=%7.9f\n", j, MaxIndex, Max, MinIndex, Min, Avg / j);
     // display the upper portion of the matrix to ensure correctness of the
     // algorithms
     displayUpperQuadrant(PRINTDIM);
@@ -156,7 +156,6 @@ double rowwise_entry(int i, int j) {
 void initialize_rowwise() {
   int i,j;
   double x = 0.0;
-  #pragma omp parallel for
   for (i = 0; i < DIMENSION; i++)
     for (j = 0; j < DIMENSION; j++)
       *(*Matrix + i * DIMENSION + j) = rowwise_entry(i, j);
@@ -168,7 +167,6 @@ Initialize a matrix rowwise recusively (cut it into chunks)
 void initialize_rowwise_recursive(int i, int j, int dimension, int blocksize) {
   int dx,dy;
   if (dimension <= blocksize) {
-    #pragma omp parallel for
     for (dx = 0; dx < dimension; dx++)
       for (dy = 0; dy < dimension; dy++)
         *(*Matrix + (i + dx) * DIMENSION + j + dy) = rowwise_entry(i + dx, j + dy);
