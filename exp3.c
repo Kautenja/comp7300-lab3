@@ -46,10 +46,11 @@ double rowwise_entry(int i, int j);
 int columnwise_nodes(int j);
 double columnwise_entry(int i, int j);
 void initialize_rowwise();
-void thread_initialize_rowwise();
 void initialize_rowwise_recursive(int i, int j, int dimension, int blocksize);
+void thread_initialize_rowwise();
 void initialize_columnwise();
 void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize);
+void thread_initialize_columnwise();
 void displayUpperQuadrant(unsigned dimension);
 void swap(double *a, double *b);
 void transpose();
@@ -266,6 +267,42 @@ void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize)
   }
 }
 
+void *thread_initialize_columnwise_tl(void *voidData) {
+  initialize_columnwise_recursive(0, 0, DIMENSION / 2, BLOCK_SIZE);
+  return 0;
+}
+
+void *thread_initialize_columnwise_tr(void *voidData) {
+  initialize_columnwise_recursive(DIMENSION / 2, 0, DIMENSION / 2, BLOCK_SIZE);
+  return 0;
+}
+
+void *thread_initialize_columnwise_bl(void *voidData) {
+  initialize_columnwise_recursive(0, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
+  return 0;
+}
+
+void *thread_initialize_columnwise_br(void *voidData) {
+  initialize_columnwise_recursive(DIMENSION / 2, DIMENSION / 2, DIMENSION / 2, BLOCK_SIZE);
+  return 0;
+}
+
+void thread_initialize_columnwise() {
+  pthread_t threads[NTHREADS];
+  int thread_args[NTHREADS];
+  int rc, i;
+
+  pthread_create(&threads[0], NULL, *thread_initialize_columnwise_tl, NULL);
+  pthread_create(&threads[1], NULL, *thread_initialize_columnwise_tr, NULL);
+  pthread_create(&threads[2], NULL, *thread_initialize_columnwise_bl, NULL);
+  pthread_create(&threads[3], NULL, *thread_initialize_columnwise_br, NULL);
+
+  // wait for threads to finish
+  for (i=0; i<NTHREADS; ++i) {
+    rc = pthread_join(threads[i], NULL);
+  }
+}
+
 /*!
 Swap the double values in two memory locations.
 Args:
@@ -365,10 +402,14 @@ Initialize and transpose an array the most optimal way possible.
 */
 void initializeAndTranspose() {
   // initialize_rowwise();
-  thread_initialize_rowwise();
   // initialize_rowwise_recursive(0, 0, DIMENSION, 512);
+  // thread_initialize_rowwise();
+
   // initialize_columnwise();
   // initialize_columnwise_recursive(0, 0, DIMENSION, 512);
+  thread_initialize_columnwise();
+
+  // transpose();
   // recursive_transpose(0, 0, DIMENSION, 512);
   thread_transpose();
 }
