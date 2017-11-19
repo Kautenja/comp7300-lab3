@@ -40,7 +40,7 @@ The threading exponent. 2^THREAD_EXP threads are used.
 For tux machines THREAD_EXP = 4 (16 cores)
 For laptops THREAD_EXP = 2 (4 cores)
 */
-#define THREAD_EXP       5 // 2^THREAD_EXP threads are used
+#define THREAD_EXP       4 // 2^THREAD_EXP threads are used
 /*!
 The number of threads determined by the threading exponent
 */
