@@ -23,9 +23,9 @@ typedef double          Period;
 /**********************************************************************\
 *                      Global definitions                              *
 \**********************************************************************/
-#define DIMENSION        40000
-#define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS     7
+#define DIMENSION        14//40000
+#define PRINTDIM         14//7 // Dimension of matrix to display
+#define NUMBER_TESTS     1//7
 
 /**********************************************************************\
 *                      Global data                              *
@@ -94,7 +94,7 @@ int main(){
     printf("%3d: Init and Transpose Max[%2d]=%7.3f Min[%2d]=%7.3f Avg=%7.3f\n", j, MaxIndex, Max, MinIndex, Min, Avg / j);
     // display the upper portion of the matrix to ensure correctness of the
     // algorithms
-    displayUpperQuadrant(PRINTDIM);
+    // displayUpperQuadrant(PRINTDIM);
   }
 }
 
@@ -207,8 +207,19 @@ Returns:
   void
 */
 void recursive_transpose(int i, int j, int dimension) {
-  if (dimension <= 1) {
-    return;
+  int dx,dy;
+  printf("%i ", i);
+  printf("%i ", j);
+  printf("%i ", dimension);
+  printf("\n");
+  if (dimension <= 13) {
+    // #pragma omp parallel for
+    // for (dx = i; dx < i + dimension; dx++)
+    //   for (dy = j + dx; dy < j + dimension; dy++)
+    //     swap(&Matrix[i + dx][j + dy], &Matrix[j + dy][i + dx]);
+    for (dx = 0; dx < dimension; dx++)
+      for (dy = dx; dy < dimension; dy++)
+        swap(&Matrix[i + dx][j + dy], &Matrix[j + dy][i + dx]);
   } else {
     // cut the matrix into four quadrants and recursively transpose them
     // the midpoint is halfway into the matrix
@@ -223,7 +234,7 @@ void recursive_transpose(int i, int j, int dimension) {
     // the lower right quadrant
     recursive_transpose(i + midpoint, j + midpoint, midpoint);
     // swap upper right with the bottom left
-    swap_matrices(i + midpoint, j, i, j + midpoint, midpoint);
+    // swap_matrices(i + midpoint, j, i, j + midpoint, midpoint);
   }
 }
 
@@ -231,9 +242,15 @@ void recursive_transpose(int i, int j, int dimension) {
 Initialize and transpose an array the most optimal way possible.
 */
 void initializeAndTranspose() {
+
   initialize_rowwise();
-  // transpose();
+  transpose();
+  displayUpperQuadrant(DIMENSION);
+
+  initialize_rowwise();
   recursive_transpose(0, 0, DIMENSION);
+  displayUpperQuadrant(DIMENSION);
+
 }
 
 /*********************************************************************\
