@@ -411,16 +411,7 @@ void thread_transpose() {
 Initialize and transpose an array the most optimal way possible.
 */
 void initializeAndTranspose() {
-  // initialize_rowwise();
-  // initialize_rowwise_recursive(0, 0, DIMENSION, 512);
-  thread_initialize_rowwise();
-
-  // initialize_columnwise();
-  // initialize_columnwise_recursive(0, 0, DIMENSION, 512);
-  // thread_initialize_columnwise();
-
-  // transpose();
-  // recursive_transpose(0, 0, DIMENSION, 512);
+  thread_initialize_columnwise();
   thread_transpose();
 }
 
