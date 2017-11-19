@@ -23,7 +23,7 @@ typedef double          Period;
 /**********************************************************************\
 *                      Global definitions                              *
 \**********************************************************************/
-#define DIMENSION        14//40000
+#define DIMENSION        14
 #define PRINTDIM         14//7 // Dimension of matrix to display
 #define NUMBER_TESTS     1//7
 
@@ -212,14 +212,17 @@ void recursive_transpose(int i, int j, int dimension) {
   printf("%i ", j);
   printf("%i ", dimension);
   printf("\n");
-  if (dimension <= 13) {
+  if (dimension % 2 == 1) {
     // #pragma omp parallel for
     // for (dx = i; dx < i + dimension; dx++)
     //   for (dy = j + dx; dy < j + dimension; dy++)
     //     swap(&Matrix[i + dx][j + dy], &Matrix[j + dy][i + dx]);
     for (dx = 0; dx < dimension; dx++)
       for (dy = dx; dy < dimension; dy++)
-        swap(&Matrix[i + dx][j + dy], &Matrix[j + dy][i + dx]);
+        if (i == j)
+          swap(&Matrix[i + dx][j + dy], &Matrix[j + dy][i + dx]);
+        else
+          swap(&Matrix[i + dx][j + dy], &Matrix[dimension - j + dy][dimension - i + dx]);
   } else {
     // cut the matrix into four quadrants and recursively transpose them
     // the midpoint is halfway into the matrix
@@ -234,7 +237,7 @@ void recursive_transpose(int i, int j, int dimension) {
     // the lower right quadrant
     recursive_transpose(i + midpoint, j + midpoint, midpoint);
     // swap upper right with the bottom left
-    // swap_matrices(i + midpoint, j, i, j + midpoint, midpoint);
+    swap_matrices(i + midpoint, j, i, j + midpoint, midpoint);
   }
 }
 
