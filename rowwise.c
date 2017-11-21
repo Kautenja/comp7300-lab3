@@ -32,8 +32,8 @@ struct threadParams {
 *                      Global definitions                              *
 \**********************************************************************/
 #define DIMENSION        40000
-#define PRINTDIM         2000 // Dimension of matrix to display
-#define NUMBER_TESTS     1
+#define PRINTDIM         7 // Dimension of matrix to display
+#define NUMBER_TESTS     7
 #define BLOCK_SIZE       625
 /*!
 The threading exponent. 2^THREAD_EXP threads are used.
