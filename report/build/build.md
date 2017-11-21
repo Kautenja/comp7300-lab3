@@ -1,6 +1,6 @@
 <!-- Replace The Title Here -->
 
-\title{Hardware Utilization for Fast 2D Matrix Initialization and Tranpose}
+\title{Recursive Parallel Methods for Fast 2D Matrix Initialization and Transposition}
 
 <!-- Replace Author Information Here -->
 
