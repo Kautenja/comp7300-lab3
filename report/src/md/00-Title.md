@@ -1,6 +1,6 @@
 <!-- Replace The Title Here -->
 
-\title{The Effect of Cache Memory on Matrix Operations}
+\title{Hardware Utilization for Fast 2D Matrix Initialization and Tranpose}
 
 <!-- Replace Author Information Here -->
 
