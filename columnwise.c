@@ -32,9 +32,9 @@ struct threadParams {
 *                      Global definitions                              *
 \**********************************************************************/
 #define DIMENSION        40000
-#define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS     7
-#define BLOCK_SIZE       512
+#define PRINTDIM         2000 // Dimension of matrix to display
+#define NUMBER_TESTS     1
+#define BLOCK_SIZE       625
 /*!
 The threading exponent. 2^THREAD_EXP threads are used.
 For tux machines THREAD_EXP = 4 (16 cores)
@@ -128,97 +128,6 @@ Timestamp Now(){
   struct timeval tv_CurrentTime;
   gettimeofday(&tv_CurrentTime,NULL);
   return( (Timestamp) tv_CurrentTime.tv_sec + (Timestamp) tv_CurrentTime.tv_usec / 1000000.0-StartTime);
-}
-
-/*!
- * Return the number of nodes in a rowwise row.
- * @param i the row to get the node count of
- */
-int rowwise_nodes(int i) {
-  return i * (i + 1) / 2;
-}
-
-/*!
- * Return the entry for a rowwise array.
- * @param i the row to fetch the value of
- * @param j the column to fetch the value of
- */
-double rowwise_entry(int i, int j) {
-  if (i < j) {
-    return 1;
-  }
-  return rowwise_nodes(i) + j;
-}
-
-/*!
- * Initialize the matrix rowwise.
- */
-void initialize_rowwise() {
-  int i,j;
-  double x = 0.0;
-  #pragma omp parallel for
-  for (i = 0; i < DIMENSION; i++)
-    for (j = 0; j < DIMENSION; j++)
-      *(*Matrix + i * DIMENSION + j) = rowwise_entry(i, j);
-}
-
-/*!
-Initialize a matrix rowwise recusively (cut it into chunks)
-*/
-void initialize_rowwise_recursive(int i, int j, int dimension, int blocksize) {
-  int dx,dy;
-  if (dimension <= blocksize) {
-    #pragma omp parallel for
-    for (dx = 0; dx < dimension; dx++)
-      for (dy = 0; dy < dimension; dy++)
-        *(*Matrix + (i + dx) * DIMENSION + j + dy) = rowwise_entry(i + dx, j + dy);
-  } else {
-    // cut the matrix into four quadrants and recursively initialize
-    int midpoint = dimension / 2;
-    // recursively call this function with the 4 smaller quadrants
-    // the upper left quadrant
-    initialize_rowwise_recursive(i, j, midpoint, blocksize);
-    // the upper right quadrant
-    initialize_rowwise_recursive(i + midpoint, j, midpoint, blocksize);
-    // the lower left quadrant
-    initialize_rowwise_recursive(i, j + midpoint, midpoint, blocksize);
-    // the lower right quadrant
-    initialize_rowwise_recursive(i + midpoint, j + midpoint, midpoint, blocksize);
-  }
-}
-
-/*!
-A launcher for starting background threads to initialize rowwise.
-*/
-void *thread_initialize_rowwise_helper(void *data) {
-  struct threadParams *params = data;
-  initialize_rowwise_recursive(params->i, params->j, params->dimension, BLOCK_SIZE);
-  return 0;
-}
-
-/*!
-Initialize the matrix rowwise using threads.
-*/
-void thread_initialize_rowwise() {
-  pthread_t threads[NTHREADS];
-  int thread_args[NTHREADS];
-  int rc, i, j, dimension;
-
-  dimension = DIMENSION / THREAD_EXP;
-  struct threadParams params[THREAD_EXP][THREAD_EXP];
-  for (i = 0; i < THREAD_EXP; i++) {
-    for (j = 0; j < THREAD_EXP; j++) {
-      params[i][j].i = i * dimension;
-      params[i][j].j = j * dimension;
-      params[i][j].dimension = dimension;
-      rc = pthread_create(&threads[i + THREAD_EXP * j], NULL, *thread_initialize_rowwise_helper, &params[i][j]);
-    }
-  }
-
-  // wait for threads to finish
-  for (i = 0; i < NTHREADS; i++) {
-    rc = pthread_join(threads[i], NULL);
-  }
 }
 
 /*!

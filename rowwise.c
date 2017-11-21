@@ -32,9 +32,9 @@ struct threadParams {
 *                      Global definitions                              *
 \**********************************************************************/
 #define DIMENSION        40000
-#define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS     7
-#define BLOCK_SIZE       512
+#define PRINTDIM         2000 // Dimension of matrix to display
+#define NUMBER_TESTS     1
+#define BLOCK_SIZE       625
 /*!
 The threading exponent. 2^THREAD_EXP threads are used.
 For tux machines THREAD_EXP = 4 (16 cores)
@@ -156,7 +156,6 @@ double rowwise_entry(int i, int j) {
 void initialize_rowwise() {
   int i,j;
   double x = 0.0;
-  #pragma omp parallel for
   for (i = 0; i < DIMENSION; i++)
     for (j = 0; j < DIMENSION; j++)
       *(*Matrix + i * DIMENSION + j) = rowwise_entry(i, j);
@@ -168,7 +167,6 @@ Initialize a matrix rowwise recusively (cut it into chunks)
 void initialize_rowwise_recursive(int i, int j, int dimension, int blocksize) {
   int dx,dy;
   if (dimension <= blocksize) {
-    #pragma omp parallel for
     for (dx = 0; dx < dimension; dx++)
       for (dy = 0; dy < dimension; dy++)
         *(*Matrix + (i + dx) * DIMENSION + j + dy) = rowwise_entry(i + dx, j + dy);
@@ -212,97 +210,6 @@ void thread_initialize_rowwise() {
       params[i][j].j = j * dimension;
       params[i][j].dimension = dimension;
       rc = pthread_create(&threads[i + THREAD_EXP * j], NULL, *thread_initialize_rowwise_helper, &params[i][j]);
-    }
-  }
-
-  // wait for threads to finish
-  for (i = 0; i < NTHREADS; i++) {
-    rc = pthread_join(threads[i], NULL);
-  }
-}
-
-/*!
- * Return the number of nodes in a columnwise matrix.
- * @param  j the column index
- * @param  n the dimension of the matrix
- */
-int columnwise_nodes(int j) {
-  return (1.0 / 2.0) * (-(j*j) + COLUMNWISE_TN*j - 2.0);
-}
-
-/*!
- * Return the columnwise entry for an i,j pairing.
- * mathed out using the series of smaller matrices and WolframAlpha
- * @param  i the row index
- * @param  j the column index
- */
-double columnwise_entry(int i, int j) {
-  if (i < j) {
-    return 1;
-  }
-  return columnwise_nodes(j + 1) - (DIMENSION - i - 1);
-}
-
-/*!
- * Initialize the matrix columnwise.
- */
-void initialize_columnwise() {
-  int i,j;
-  double x = 0.0;
-  for (j = 0; j < DIMENSION; j++)
-    for (i = 0; i < DIMENSION; i++)
-      *(*Matrix + i * DIMENSION + j) = columnwise_entry(i, j);
-}
-
-/*!
-Initialize the matrix columnwise using a recursive solution.
-*/
-void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize) {
-  int dx,dy;
-  if (dimension <= blocksize) {
-    for (dx = 0; dx < dimension; dx++)
-      for (dy = 0; dy < dimension; dy++)
-        *(*Matrix + (i + dx) * DIMENSION + j + dy) = columnwise_entry(i + dx, j + dy);
-  } else {
-    // cut the matrix into four quadrants and recursively initialize
-    int midpoint = dimension / 2;
-    // recursively call this function with the 4 smaller quadrants
-    // the upper left quadrant
-    initialize_columnwise_recursive(i, j, midpoint, blocksize);
-    // the upper right quadrant
-    initialize_columnwise_recursive(i + midpoint, j, midpoint, blocksize);
-    // the lower left quadrant
-    initialize_columnwise_recursive(i, j + midpoint, midpoint, blocksize);
-    // the lower right quadrant
-    initialize_columnwise_recursive(i + midpoint, j + midpoint, midpoint, blocksize);
-  }
-}
-
-/*!
-A launcher for starting background threads to initialize columnwise.
-*/
-void *thread_initialize_columnwise_helper(void *data) {
-  struct threadParams *params = data;
-  initialize_columnwise_recursive(params->i, params->j, params->dimension, BLOCK_SIZE);
-  return 0;
-}
-
-/*!
-Initialize the matrix columnwise using threads.
-*/
-void thread_initialize_columnwise() {
-  pthread_t threads[NTHREADS];
-  int thread_args[NTHREADS];
-  int rc, i, j, dimension;
-
-  dimension = DIMENSION / THREAD_EXP;
-  struct threadParams params[THREAD_EXP][THREAD_EXP];
-  for (j = 0; j < THREAD_EXP; j++) {
-    for (i = 0; i < THREAD_EXP; i++) {
-      params[i][j].i = i * dimension;
-      params[i][j].j = j * dimension;
-      params[i][j].dimension = dimension;
-      rc = pthread_create(&threads[i + THREAD_EXP * j], NULL, *thread_initialize_columnwise_helper, &params[i][j]);
     }
   }
 
