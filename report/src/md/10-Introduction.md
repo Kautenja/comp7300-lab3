@@ -2,11 +2,11 @@
 
 ## Hierarchical Memory
 
-_Hierarchical memory_ utilizes a sequence of memory devices and heuristics to
-improve performance of memory operations. This sequence exists to balance
-performance and cost, allowing machines to take advantage of more expensive,
-but faster, memory devices. The machine can then leverage these devices for
-recurring or frequently used data to reduce latency.
+_Hierarchical (Cache) memory_ utilizes a sequence of memory devices and
+heuristics to improve performance of memory operations. This sequence exists to
+balance performance and cost, allowing machines to take advantage of more
+expensive, but faster, memory devices. The machine can then leverage these
+devices for recurring or frequently used data to reduce latency.
 
 ### Locality
 
