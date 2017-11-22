@@ -69,6 +69,7 @@ void initialize_columnwise();
 void initialize_columnwise_recursive(int i, int j, int dimension, int blocksize);
 void thread_initialize_columnwise();
 void displayUpperQuadrant(unsigned dimension);
+void printMatrix(unsigned dimension);
 void swap(double *a, double *b);
 void transpose();
 void recursive_transpose(int i, int j, int dimension, int blocksize);
@@ -114,7 +115,7 @@ int main(){
     printf("%3d: Init and Transpose Max[%2d]=%7.3f Min[%2d]=%7.3f Avg=%7.3f\n", j, MaxIndex, Max, MinIndex, Min, Avg / j);
     // display the upper portion of the matrix to ensure correctness of the
     // algorithms
-    displayUpperQuadrant(PRINTDIM);
+    printMatrix(PRINTDIM);
   }
 }
 
@@ -338,6 +339,51 @@ void displayUpperQuadrant(unsigned dimension) {
     for (j = 0; j < dimension; j++){
       printf("%8.1f ",Matrix[i][j]);
     }
+    printf("]\n");
+  }
+  printf("***************************************************************\n\n");
+}
+
+/*********************************************************************\
+* Input    : dimension (first n lines/columns)                        *
+* Output   : None                                                     *
+* Function : Initialize a matrix columnwise                           *
+\*********************************************************************/
+void printMatrix(unsigned dimension) {
+  int i,j;
+
+  printf("\n\n*Top Left****************************************************\n");
+  for (i = 0; i < dimension; i++) {
+    printf("[");
+    for (j = 0; j < dimension; j++)
+      printf("%12.1f ", Matrix[i][j]);
+    printf("]\n");
+  }
+  printf("***************************************************************\n\n");
+
+  printf("\n\n*Bottom Left*************************************************\n");
+  for (i = DIMENSION - dimension; i < DIMENSION; i++) {
+    printf("[");
+    for (j = 0; j < dimension; j++)
+      printf("%12.1f ", Matrix[i][j]);
+    printf("]\n");
+  }
+  printf("***************************************************************\n\n");
+
+  printf("\n\n*Top Right***************************************************\n");
+  for (i = 0; i < dimension; i++) {
+    printf("[");
+    for (j = DIMENSION - dimension; j < DIMENSION; j++)
+      printf("%12.1f ", Matrix[i][j]);
+    printf("]\n");
+  }
+  printf("***************************************************************\n\n");
+
+  printf("\n\n*Bottom Right************************************************\n");
+  for (i = DIMENSION - dimension; i < DIMENSION; i++) {
+    printf("[");
+    for (j = DIMENSION - dimension; j < DIMENSION; j++)
+      printf("%12.1f ", Matrix[i][j]);
     printf("]\n");
   }
   printf("***************************************************************\n\n");
