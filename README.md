@@ -31,8 +31,23 @@ are set correctly first:
 
 A test can be executed using the following command:
 
-	run.sh <code file name (WITHOUT.c)>
+	run.sh <code file name>
+
+This will route the shell output to a file in the [`build`](./build) directory
+called `<code file name>.out`.
 
 ##### Example
 
 	run.sh myInitializeMatrix
+
+#### [`rowwise.c`](./rowwise.c)
+
+To run the _Row-Wise_ initialization (and optimized transposition):
+
+	run.sh rowwise
+
+#### [`columnwise.c`](columnwise.c)
+
+To run the _Column-Wise_ initialization (and optimized transposition):
+
+	run.sh columnwise
