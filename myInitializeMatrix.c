@@ -23,9 +23,9 @@ typedef double          Period;
 /**********************************************************************\
 *                      Global definitions                              *
 \**********************************************************************/
-#define DIMENSION    40000
+#define DIMENSION        40000
 #define PRINTDIM         7 // Dimension of matrix to display
-#define NUMBER_TESTS    12
+#define NUMBER_TESTS     7//12
 #define ROWWISE          0 
 #define COLUMNWISE       1
 
