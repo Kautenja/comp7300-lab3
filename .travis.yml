@@ -8,4 +8,5 @@ script:
   - cc -pthread columnwise.c -o build/columnwise
   - chmod 0755 run.sh
   - ./run.sh rowwise
+  - ./run.sh columnwise
   - make zip

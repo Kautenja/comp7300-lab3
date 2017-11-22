@@ -1,5 +1,7 @@
 # COMP7300 - Lab3
 
+[![Build Status](https://travis-ci.com/Kautenja/comp7300-lab3.svg?token=FCkX2qMNHzx2qWEzZZMP&branch=master)](https://travis-ci.com/Kautenja/comp7300-lab3)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your
