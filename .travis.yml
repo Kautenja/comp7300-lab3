@@ -1,10 +1,11 @@
 language: c
 notifications:
   email: false
-  slack: scruffyai:YY2ktJMeH6isfuz2BPOzr1Jl
 script:
   - mkdir -p build
   - cc myInitializeMatrix.c -o build/myInitializeMatrix
-  - cc exp1.c -o build/exp1
-  - cc exp2.c -o build/exp2
-  - cc exp3.c -o build/exp3
+  - cc rowwise.c -o build/rowwise
+  - cc -pthread columnwise.c -o build/columnwise
+  - chmod 0755 run.sh
+  - ./run.sh rowwise
+  - make zip
