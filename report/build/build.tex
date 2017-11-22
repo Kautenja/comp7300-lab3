@@ -156,30 +156,40 @@ operating on the memory.
 \subsection{Results}\label{results}
 
 With all improvements in place, the algorithm achieves a mean score of
-\(\approx 6.4s\) using row-major ordering to initialize and transpose.
-Fig. \ref{all-means} displays the mean time as it changes across the 5
-trials of 7 experiments. The times drop slightly between sequential
-executions of the program as the OS allocates more resources for the
-user. Each trial demonstrates a gradual decrease in time with each
-additional test. This attributes to cache hits as the same memory is
-accessed by the same program during the same execution.
+\(\approx 4s\) using row-major ordering to initialize and transpose.
+Fig. \ref{means} displays the mean times as it changes across the 5
+trials of 7 experiments. The times vary slightly between sequential
+executions of the program as the OS allocates resources for the users.
 
 \begin{figure}[ht]
 \centering
-\label{all-means}
-\includegraphics[height=2.5in]{img/all-means}
+\caption{Mean Times to Initialize and Transpose a 40000x40000 Matrix}
+\label{means}
+\includegraphics[width=3.25in]{img/means}
 \end{figure}
+
+\begin{figure}[ht]
+\centering
+\caption{Times to Initialize and Transpose a 40000x40000 Matrix}
+\label{all-means}
+\includegraphics[width=3.25in]{img/all-means}
+\end{figure}
+
+Fig. \ref{all-means} shows the trend of mean across all tests in the 5
+trials. Each trial demonstrates a gradual decrease in time with each
+additional test. This attributes to cache hits as the same memory is
+accessed by the same program during the same execution.
 
 \section{Conclusions}\label{conclusions}
 
 This paper presents a recursive and parallel method to initialize and
-transpose a 2x2 square matrix in minimal time. A key feature of this
+transpose a large square matrix in minimal time. A key feature of this
 recursive algorithm is a natural ``cache naive'' trait that allows it to
 exploit the cache line without explicit cache blocking. This coupled
 with a highly parallel architecture, like the 8-core Intel Core i7
 processors in the Tux machines, allows the algorithm to initialize and
-transpose a 40000x40000 matrix (\(\approx 12.8\)GB) in less than 7
-seconds (\(\approx 1.8GB/s\)). Although this time is fast, faster times
+transpose a 40000x40000 matrix (\(\approx 12.8\)GB) in 4 seconds
+(\(\approx 3.2GB/s\)). Although this time is fast, faster times
 certainly exist. Future research may investigate the integration of
 vector architectures like GPUs to speedup the initialization and
 transpose of matrices.

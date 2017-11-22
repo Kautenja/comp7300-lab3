@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  21 NOV 2017 17:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  21 NOV 2017 23:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -489,11 +489,17 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 ]
-<img/all-means.png, id=14, 390.45876pt x 281.05pt>
+<img/means.png, id=14, 414.54875pt x 281.05pt>
+File: img/means.png Graphic file (type png)
+ <use img/means.png>
+Package pdftex.def Info: img/means.png used on input line 168.
+(pdftex.def)             Requested size: 234.87749pt x 159.23524pt.
+
+<img/all-means.png, id=16, 397.485pt x 281.05pt>
 File: img/all-means.png Graphic file (type png)
  <use img/all-means.png>
-Package pdftex.def Info: img/all-means.png used on input line 170.
-(pdftex.def)             Requested size: 251.00687pt x 180.67499pt.
+Package pdftex.def Info: img/all-means.png used on input line 175.
+(pdftex.def)             Requested size: 234.87749pt x 166.07965pt.
 
 
 ** Conference Paper **
@@ -507,32 +513,33 @@ Before submitting the final camera ready copy, remember to:
  process uses the appropriate paper size.
 
 - LAST -
-Extra skip:300.37503pt
-Left:461.68991pt/0.0pt
-Right:159.14996pt/2.16492pt
-Output:454.8125pt
-[2 <./img/all-means.png>] (./build.aux) ) 
+Extra skip:78.50563pt
+Left:672.0pt/0.0pt
+Right:372.65254pt/0.11491pt
+Output:409.2778pt
+[2 <./img/means.png> <./img/all-means.png>] (./build.aux) ) 
 Here is how much of TeX's memory you used:
- 5558 strings out of 492995
- 82566 string characters out of 6132704
+ 5565 strings out of 492995
+ 82659 string characters out of 6132704
  156262 words of memory out of 5000000
- 9037 multiletter control sequences out of 15000+600000
+ 9043 multiletter control sequences out of 15000+600000
  34706 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,7n,32p,785b,244s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2017/texmf-dist/fo
-nts/enc/dvips/base/8r.enc}</usr/local/texlive/2017/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/u
-tmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb
-></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/loc
-al/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on build.pdf (2 pages, 114341 bytes).
+{/usr/local/texlive/
+2017/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2017/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts
+/type1/urw/times/utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw
+/times/utmbi8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/ut
+mr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+
+Output written on build.pdf (2 pages, 136051 bytes).
 PDF statistics:
- 47 PDF objects out of 1000 (max. 8388607)
+ 49 PDF objects out of 1000 (max. 8388607)
  32 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
