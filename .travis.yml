@@ -6,7 +6,4 @@ script:
   - cc myInitializeMatrix.c -o build/myInitializeMatrix
   - cc -pthread rowwise.c -o build/rowwise
   - cc -pthread columnwise.c -o build/columnwise
-  - chmod 0755 run.sh
-  - ./run.sh rowwise
-  - ./run.sh columnwise
   - make zip
