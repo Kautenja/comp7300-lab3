@@ -5,7 +5,7 @@
 <!-- Replace Author Information Here -->
 
 \newcommand{\AuthorName}{Christian Kauten}
-\newcommand{\AuthorEmail}{jck0022@auburn.edu}
+\newcommand{\AuthorEmail}{kautenja@auburn.edu}
 
 <!-- shared properties for AU -->
 \newcommand{\Deptartment}{Software Engineering and Computer Science}
