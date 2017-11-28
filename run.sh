@@ -1,7 +1,7 @@
 #!/bin/sh
 mkdir -p build
 echo 'compiling'
-cc -pthread $1.c -o ./build/$1
+cc -Ofast -pthread $1.c -o ./build/$1
 echo 'running 1'
 ./build/$1 > ./build/$1.out
 echo 'running 2'
