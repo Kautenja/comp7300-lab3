@@ -44,7 +44,7 @@ For laptops THREAD_EXP = 2 (4 cores)
 /*!
 The number of threads determined by the threading exponent
 */
-#define NTHREADS         2 << THREAD_EXP - 1
+#define NTHREADS         1 << THREAD_EXP
 /**********************************************************************\
 *                      Global data                                     *
 \**********************************************************************/
