@@ -4,6 +4,6 @@ notifications:
 script:
   - mkdir -p build
   - cc myInitializeMatrix.c -o build/myInitializeMatrix
-  - cc -pthread rowwise.c -o build/rowwise
-  - cc -pthread columnwise.c -o build/columnwise
+  - cc -Ofast -pthread rowwise.c -o build/rowwise
+  - cc -Ofast -pthread columnwise.c -o build/columnwise
   - make zip
