@@ -89,3 +89,22 @@ Fig. \ref{all-means} shows the trend of mean across all tests in the 5 trials.
 Each trial demonstrates a gradual decrease in time with each additional test.
 This attributes to cache hits as the same memory is accessed by the same
 program during the same execution.
+
+### Compiler Optimizations
+
+The GCC documentation reveals compiler flags for enabling compile-time
+optimizations. They offer a leveled system: `-O1`, `-O2`, and `-O3` that
+sequentially enable more features. A final extreme option `-Ofast` enables
+some addtional features relating to math and Fortran. The `-Ofast` flag
+produces the best improvement from the base results. Fig. \ref{means-Ofast}
+shows the means for the 5 trials of both row-wise and column-wise
+initialization and then transposition. The compile-time optimizations reduce
+both times by $\approx \frac{1}{2}$. Interestingly, column-wise operation
+outperforms row-wise across the board by $\approx 200ms$.
+
+\begin{figure}[ht]
+\centering
+\caption{Times to Initialize and Transpose a Matrix with Compiler Optimizations}
+\label{means-Ofast}
+\includegraphics[width=3.25in]{img/means-Ofast}
+\end{figure}

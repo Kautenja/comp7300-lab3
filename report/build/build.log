@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  21 NOV 2017 23:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  29 NOV 2017 20:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -500,6 +500,17 @@ File: img/all-means.png Graphic file (type png)
  <use img/all-means.png>
 Package pdftex.def Info: img/all-means.png used on input line 175.
 (pdftex.def)             Requested size: 234.87749pt x 166.07965pt.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 186.
+
+
+(/usr/local/texlive/2017/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+<img/means-Ofast.png, id=17, 414.54875pt x 281.05pt>
+File: img/means-Ofast.png Graphic file (type png)
+ <use img/means-Ofast.png>
+Package pdftex.def Info: img/means-Ofast.png used on input line 200.
+(pdftex.def)             Requested size: 234.87749pt x 159.23524pt.
 
 
 ** Conference Paper **
@@ -513,33 +524,35 @@ Before submitting the final camera ready copy, remember to:
  process uses the appropriate paper size.
 
 - LAST -
-Extra skip:78.50563pt
+Extra skip:119.87276pt
 Left:672.0pt/0.0pt
-Right:372.65254pt/0.11491pt
-Output:409.2778pt
-[2 <./img/means.png> <./img/all-means.png>] (./build.aux) ) 
+Right:532.50308pt/2.16492pt
+Output:608.16943pt
+[2 <./img/means.png> <./img/all-means.png> <./img/means-Ofast.png>]
+(./build.aux) ) 
 Here is how much of TeX's memory you used:
- 5565 strings out of 492995
- 82659 string characters out of 6132704
- 156262 words of memory out of 5000000
- 9043 multiletter control sequences out of 15000+600000
- 34706 words of font info for 70 fonts, out of 8000000 for 9000
+ 5607 strings out of 492995
+ 83315 string characters out of 6132704
+ 161287 words of memory out of 5000000
+ 9079 multiletter control sequences out of 15000+600000
+ 35221 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,7n,32p,785b,244s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/
-2017/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2017/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2017/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2017/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2017/texmf-dist/font
-s/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2017/texmf-dist/fonts
-/type1/urw/times/utmb8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw
-/times/utmbi8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/ut
-mr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-
-Output written on build.pdf (2 pages, 136051 bytes).
+{/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc}
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></u
+sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/lo
+cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
+al/texlive/2017/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texli
+ve/2017/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2017/te
+xmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2017/texmf-dist/
+fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2017/texmf-dist/fonts/type
+1/urw/times/utmri8a.pfb>
+Output written on build.pdf (2 pages, 168857 bytes).
 PDF statistics:
- 49 PDF objects out of 1000 (max. 8388607)
- 32 compressed objects within 1 object stream
+ 59 PDF objects out of 1000 (max. 8388607)
+ 38 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

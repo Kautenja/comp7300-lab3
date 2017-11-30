@@ -26,7 +26,7 @@
 \title{Recursive Parallel Methods for Fast 2D Matrix Initialization and Transposition}
 
 \newcommand{\AuthorName}{Christian Kauten}
-\newcommand{\AuthorEmail}{jck0022@auburn.edu}
+\newcommand{\AuthorEmail}{kautenja@auburn.edu}
 
 \newcommand{\Deptartment}{Software Engineering and Computer Science}
 \newcommand{\University}{Auburn  University}
@@ -180,16 +180,36 @@ trials. Each trial demonstrates a gradual decrease in time with each
 additional test. This attributes to cache hits as the same memory is
 accessed by the same program during the same execution.
 
+\subsubsection{Compiler Optimizations}\label{compiler-optimizations}
+
+The GCC documentation reveals compiler flags for enabling compile-time
+optimizations. They offer a leveled system: \texttt{-O1}, \texttt{-O2},
+and \texttt{-O3} that sequentially enable more features. A final extreme
+option \texttt{-Ofast} enables some addtional features relating to math
+and Fortran. The \texttt{-Ofast} flag produces the best improvement from
+the base results. Fig. \ref{means-Ofast} shows the means for the 5
+trials of both row-wise and column-wise initialization and then
+transposition. The compile-time optimizations reduce both times by
+\(\approx \frac{1}{2}\). Interestingly, column-wise operation
+outperforms row-wise across the board by \(\approx 200ms\).
+
+\begin{figure}[ht]
+\centering
+\caption{Times to Initialize and Transpose a Matrix with Compiler Optimizations}
+\label{means-Ofast}
+\includegraphics[width=3.25in]{img/means-Ofast}
+\end{figure}
+
 \section{Conclusions}\label{conclusions}
 
 This paper presents a recursive and parallel method to initialize and
 transpose a large square matrix in minimal time. A key feature of this
 recursive algorithm is a natural ``cache naive'' trait that allows it to
 exploit the cache line without explicit cache blocking. This coupled
-with a highly parallel architecture, like the 8-core Intel Core i7
+with a highly parallel architecture, like the 16-core Intel Xeon
 processors in the Tux machines, allows the algorithm to initialize and
-transpose a 40000x40000 matrix (\(\approx 12.8\)GB) in 4 seconds
-(\(\approx 3.2GB/s\)). Although this time is fast, faster times
+transpose a 40000x40000 matrix (\(\approx 12.8\)GB) in 1.9 seconds
+(\(\approx 6.7GB/s\)). Although this time is fast, faster times
 certainly exist. Future research may investigate the integration of
 vector architectures like GPUs to speedup the initialization and
 transpose of matrices.
