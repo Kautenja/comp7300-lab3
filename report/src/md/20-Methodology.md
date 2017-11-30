@@ -30,7 +30,7 @@ designed for a specific chipset.
 ### Parallel Initializtion
 
 The recursive algorithm lends itself well to parallelism as there is no need to
-lock for data access. The tux machines feature 8 physical cores that allow 16
+lock for data access. The tux machines feature 16 physical cores that allow 16
 contiguous threads. Each core has its own L1 and L2 cache, but share an L3
 cache. As such, parallelism allows the software to better utilize the entirety
 of the cache on the machine. Because the machines are shared, the OS will have
