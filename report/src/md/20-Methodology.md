@@ -10,7 +10,9 @@ utilizing spatial locality, it performs better than _column-wise_ traversal.
 With large matrices, column-wise traversal will generate more cache misses as
 the algorithm wont portray the same degree of spatial locality. This is because
 each cell in a different row is a full matrix length of data types away from
-that cell in memory.
+that cell in memory. Preliminary results reveal a total of 5 and 35 seconds to
+initialize a matrix in row-wise and column-wise traversal respectively. This
+empirically demonstrates the importance of traversal order with matrices.
 
 ## Recursive Initialization
 
