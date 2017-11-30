@@ -1,55 +1,62 @@
 # COMP7300 - Lab3
 
-[![Build Status](https://travis-ci.com/Kautenja/comp7300-lab3.svg?token=FCkX2qMNHzx2qWEzZZMP&branch=master)](https://travis-ci.com/Kautenja/comp7300-lab3)
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your
-local machine for development and testing purposes. See deployment for notes on
-how to deploy the project on a live system.
-
-### Prerequisites
-
-This code is written in C and compiled with `cc`.
-
 ## Usage
 
 ### Compilation
 
-The code uses threads with `pthread`.
+The code uses threads with `-pthread` flag. The usage of the `-Ofast` flag
+enables all compile-time optimizations.
 
-	cc -pthread <code_file> -o <output_executable>
+	cc -Ofast -pthread <code_file> -o <output_executable>
 
 ##### Example
 
-	cc -pthread rowwise.c -o rowwise
+	cc -Ofast -pthread rowwise.c -o rowwise
 
 ### Test Automation
 
 The 5 test runs are automated with a shell script. Make sure the permissions
-are set correctly first:
+are set correctly first by executing the following from the top level of the
+project:
 
-	chmod 0755 run.sh
+	chmod 0755 ./run.sh
 
-A test can be executed using the following command:
+A test can be executed using the following command from the top level:
 
-	run.sh <code file name>
+	./run.sh <code file name>
 
 This will route the shell output to a file in the [`build`](./build) directory
-called `<code file name>.out`.
+called `<code file name>.out`. Note that the `.c` **IS NOT** included in this
+command.
 
 ##### Example
 
-	run.sh myInitializeMatrix
+To run the default provided code (adjusted for 7 tests):
+
+	./run.sh myInitializeMatrix
 
 #### [`rowwise.c`](./rowwise.c)
 
-To run the _Row-Wise_ initialization (and optimized transposition):
+contains the code for row-wise initialization and transpose. To compile and run
+the row-wise initialization (and optimized transposition):
 
-	run.sh rowwise
+	mkdir -p build
+	cc -Ofast -pthread rowwise.c -o build/rowwise
+	./build/rowwise
+
+To compile and run the 5 consecutive tests saving the output to a file:
+
+	./run.sh rowwise
 
 #### [`columnwise.c`](columnwise.c)
 
-To run the _Column-Wise_ initialization (and optimized transposition):
+contains the code for column-wsie intialization and transpose. To compile and
+run the column-wise initialization (and optimized transposition):
 
-	run.sh columnwise
+	mkdir -p build
+	cc -Ofast -pthread columnwise.c -o build/columnwise
+	./build/columnwise
+
+To compile and run the 5 consecutive tests saving the output to a file:
+
+	./run.sh columnwise
