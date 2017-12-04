@@ -1,3 +1,21 @@
+# the linux package manager
+APTGET = sudo apt-get
+# the macos packager manager
+BREW = brew
+
+
+
+# do the full installation on a Linux machine using apt-get
+linux_install:
+	${APTGET} -qq update
+	${APTGET} install -y --no-install-recommends texlive-full pandoc pandoc-citeproc
+
+# do the full installation on a MacOS machine using brew
+macos_install:
+	${BREW} update
+	${BREW} cask install mactex
+	${BREW} install pandoc
+	${BREW} install pandoc-citeproc
 
 submission: zip paper
 	rm -rf submission
