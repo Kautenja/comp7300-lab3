@@ -17,6 +17,20 @@ macos_install:
 	${BREW} install pandoc
 	${BREW} install pandoc-citeproc
 
+# the system this script is executing on
+SYSTEM := $(shell uname -s)
+# general installation script that checks system
+install:
+	@echo 'installing for: $(SYSTEM)'
+ifeq "$(SYSTEM)" "Darwin"
+	make macos_install
+endif
+ifeq "$(SYSTEM)" "Linux"
+	make linux_install
+endif
+
+
+
 submission: zip paper
 	rm -rf submission
 	mkdir -p submission
