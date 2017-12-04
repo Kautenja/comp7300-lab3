@@ -2,7 +2,7 @@ language: c
 notifications:
   email: false
 install:
-  - make install
+  - make linux_install
 script:
   - mkdir -p build
   - cc myInitializeMatrix.c -o build/myInitializeMatrix
