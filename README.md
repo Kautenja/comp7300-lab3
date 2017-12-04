@@ -1,5 +1,7 @@
 # COMP7300 - Lab3
 
+[![Build Status](https://travis-ci.org/Kautenja/comp7300-lab3.svg?branch=master)](https://travis-ci.org/Kautenja/comp7300-lab3)
+
 ## Usage
 
 ### Compilation
