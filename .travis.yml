@@ -3,7 +3,7 @@ sudo: required
 notifications:
   email: false
 install:
-  - make linux_install
+  - make install
 script:
   - mkdir -p build
   - cc myInitializeMatrix.c -o build/myInitializeMatrix
