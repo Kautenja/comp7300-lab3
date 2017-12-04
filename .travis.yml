@@ -1,4 +1,5 @@
 language: c
+sudo: required
 notifications:
   email: false
 install:
