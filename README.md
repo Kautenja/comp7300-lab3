@@ -5,7 +5,7 @@
 [build-status]: https://travis-ci.org/Kautenja/fast-cpu-transpose.svg?branch=master
 [build-server]: https://travis-ci.org/Kautenja/fast-cpu-transpose
 
-Completed for COMP7300, Advanced Computer Architecture, at Auburn University.
+Completed for Lab 3 of COMP7300, Advanced Computer Architecture, at Auburn University.
 
 ## Usage
 
