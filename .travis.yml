@@ -9,4 +9,3 @@ script:
   - cc myInitializeMatrix.c -o build/myInitializeMatrix
   - cc -Ofast -pthread rowwise.c -o build/rowwise
   - cc -Ofast -pthread columnwise.c -o build/columnwise
-  - make submission
