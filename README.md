@@ -1,6 +1,6 @@
 # Fast CPU Transpose 
 
-[![Build Status][build-status])][build-server]
+[![Build Status][build-status]][build-server]
 
 [build-status]: https://travis-ci.org/Kautenja/fast-cpu-transpose.svg?branch=master
 [build-server]: https://travis-ci.org/Kautenja/fast-cpu-transpose
