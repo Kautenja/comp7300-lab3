@@ -71,7 +71,7 @@ To compile and run the 5 consecutive tests saving the output to a file:
 
 #### [`columnwise.c`](columnwise.c)
 
-contains the code for column-wsie intialization and transpose. To compile and
+contains the code for column-wise intialization and transpose. To compile and
 run the column-wise initialization (and optimized transposition):
 
 ```shell
